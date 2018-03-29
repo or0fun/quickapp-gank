@@ -10,18 +10,21 @@
     { "name": "system.router" },
     { "name": "system.shortcut" },
     { "name": "system.fetch"},
-    { "name": "system.webview"}
+    { "name": "system.webview"},
+    {"name": "system.share"},
+    {"name": "system.prompt"},
+    {"name": "system.clipboard"}
   ],
   "permissions": [
     { "origin": "*" }
   ],
   "config": {
-    "logLevel": "debug"
+    "logLevel": "off"
   },
   "router": {
-    "entry": "Demo",
+    "entry": "Home",
     "pages": {
-      "Demo": {
+      "Home": {
         "component": "index"
       },
       "DemoDetail": {
@@ -36,7 +39,7 @@
     "menu": false,
     "titleBar": false,
     "pages": {
-      "Demo": {
+      "Home": {
         "menu": false
       },
       "DemoDetail": {

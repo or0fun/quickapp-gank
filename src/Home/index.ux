@@ -18,8 +18,8 @@
         <list class="list" show="{{currentIndex === 1}}">
           <block for="androidList">
             <list-item type="product">
-              <div class="item">
-                <text class="title" @click="open($item.url)">{{$item.desc}}</text>
+              <div class="item" @click="clickItem($item.url)">
+                <text class="title">{{$item.desc}}</text>
                 <text class="who">({{$item.who}})</text>
                 <div class="line"></div>
               </div>
@@ -29,8 +29,8 @@
         <list class="list" show="{{currentIndex === 2}}">
           <block for="iosList">
             <list-item type="product">
-              <div class="item">
-                <text class="title" @click="open($item.url)">{{$item.desc}}</text>
+              <div class="item" @click="clickItem($item.url)">
+                <text class="title">{{$item.desc}}</text>
                 <text class="who">({{$item.who}})</text>
                 <div class="line"></div>
               </div>
@@ -40,10 +40,9 @@
         <list class="list" show="{{currentIndex === 3}}">
           <block for="feList">
             <list-item type="product">
-              <div class="item">
-                <text class="title" @click="open($item.url)">{{$item.desc}}</text>
+              <div class="item" @click="clickItem($item.url)">
+                <text class="title" >{{$item.desc}}</text>
                 <text class="who">({{$item.who}})</text>
-                <div class="line"></div>
               </div>
             </list-item>
           </block>
@@ -86,33 +85,30 @@
   }
 
   .title {
-    font-size: 36px;
+    font-size: 32px;
     color: #8bb5da;
     width: 750px;
-    height: 100px;
-    lines: 1;
+    lines: 2;
     text-overflow: ellipsis;
-    margin-right: 20px;
-    margin-left: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
   }
 
   .who {
     font-size: 26px;
     color: #333333;
     width: 750px;
-    height: 100px;
     margin-left: 20px;
   }
 
   .item {
     flex-direction: column;
-    width: 700px;
-  }
-
-  .line {
-    background-color: #eeeeee;
-    height: 1px;
     width: 750px;
+    height: 140px;
+    justify-content: center;
+    align-items: center;
+    border-bottom-width: 1px;
+    border-bottom-color: #eeeeee
   }
 </style>
 
@@ -120,6 +116,9 @@
   import router from '@system.router'
   import fetch from '@system.fetch'
   import webview from '@system.webview'
+  import share from '@system.share'
+  import prompt from '@system.prompt'
+  import clipboard from '@system.clipboard'
 
   export default {
     data: {
@@ -204,6 +203,31 @@
     open(url) {
       webview.loadUrl({
         url: url
+      })
+    },
+    clickItem(url) {
+      const self = this
+      console.log(url)
+      prompt.showContextMenu({
+        itemList: ['阅读', '复制链接'],
+        success: (data) => {
+          if (data.index === 0) {
+            self.open(url)
+          } else if (data.index === 1) {
+            clipboard.set({
+              text: url
+            })
+            prompt.showToast({
+              message: '已复制链接到粘贴板'
+            })
+          }
+        },
+        cancel: (data) => {
+          console.log("handling cancel");
+        },
+        fail: (data, code) => {
+          console.log("handling fail, code=" + code);
+        }
       })
     }
   }
